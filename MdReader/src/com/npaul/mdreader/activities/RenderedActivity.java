@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.markdownj.MarkdownProcessor;
 
@@ -32,7 +34,7 @@ import com.npaul.mdreader.R;
 /**
  * An activity that renders markdown on screen using MarkdownJ -
  * http://www.markdownj.org/
- * 
+ *
  * @author Nathan Paul
  * @version 1.1
  */
@@ -40,7 +42,7 @@ public class RenderedActivity extends Activity {
 
 	/**
 	 * The renderer renders the markdown asynchronously to the main thread
-	 * 
+	 *
 	 * @author Nathan Paul
 	 */
 	private class Renderer extends AsyncTask<Intent, Integer, CharSequence> {
@@ -48,7 +50,7 @@ public class RenderedActivity extends Activity {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		@Override
@@ -65,14 +67,15 @@ public class RenderedActivity extends Activity {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		@Override
 		protected void onPostExecute(CharSequence result) {
 			findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-			if (mdp.getTitle() != null) {
-				setTitle(mdp.getTitle());
+			String title = getDocTitle(result);
+			if (title != null) {
+				setTitle(title);
 			} else {
 				setTitle("Rendered Text");
 			}
@@ -93,7 +96,7 @@ public class RenderedActivity extends Activity {
 			} catch (NullPointerException e) {
 				// load without baseURL (pictures won't work)
 				w.loadData((String) result, "text/html", "utf-8");
-				if (mdp.hasImages()) {
+				if (result.toString().contains("<img ")) {
 					AlertDialog.Builder adb = new AlertDialog.Builder(context);
 					adb.setTitle("Images can't be read");
 					adb.setMessage(
@@ -116,6 +119,18 @@ public class RenderedActivity extends Activity {
 			mdp = null; // delete the large amount of memory being used, next
 						// time garbage collection comes along
 		}
+
+        private String getDocTitle(CharSequence result) {
+
+            Matcher matcher = Pattern.compile("<h1[^<]*>([^<]+)</h1>").matcher(result);
+            if (matcher.find()) {
+                String title = matcher.group(1).trim();
+                if (!title.isEmpty())
+                    return title;
+            }
+
+            return null;
+        }
 	}
 
 	final Context context = this;
@@ -125,7 +140,7 @@ public class RenderedActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -146,7 +161,7 @@ public class RenderedActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
@@ -158,7 +173,7 @@ public class RenderedActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
@@ -198,7 +213,7 @@ public class RenderedActivity extends Activity {
 	/**
 	 * Returns contents, as CharSequence, otherwise will return
 	 * <code>null</code>
-	 * 
+	 *
 	 * @param intent
 	 * @return
 	 */
