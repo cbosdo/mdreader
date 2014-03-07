@@ -73,8 +73,8 @@ public class MainActivity extends Activity {
 			findViewById(R.id.nofiles).setVisibility(View.INVISIBLE);
 			findViewById(R.id.list).setVisibility(View.VISIBLE);
 			files = getFiles(currentDirectory);
-			initFileListView();
 		}
+		initFileListView();
 	}
 
 	/**
