@@ -73,11 +73,13 @@ public class RenderedActivity extends Activity {
 		@Override
 		protected void onPostExecute(CharSequence result) {
 			findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
-			String title = getDocTitle(result);
-			if (title != null) {
-				setTitle(title);
-			} else {
-				setTitle("Rendered Text");
+
+			// Try to set a meaningful title if we have no filename
+			if (filename == null) {
+			    String title = getDocTitle(result);
+			    if (title != null) {
+			        setTitle(title);
+			    }
 			}
 			WebSettings ws = w.getSettings();
 			ws.setTextZoom(70);
@@ -137,6 +139,8 @@ public class RenderedActivity extends Activity {
 	private WebView w;
 
 	private CharSequence src;
+	private File file;
+	private String filename;
 
 	/*
 	 * (non-Javadoc)
@@ -146,17 +150,27 @@ public class RenderedActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
-		Intent intent = getIntent();
+	    super.onCreate(savedInstanceState);
 
-		new Renderer().execute(intent);
+	    // Start rendering
+	    Intent intent = getIntent();
+	    new Renderer().execute(intent);
 
-		super.onCreate(savedInstanceState);
+	    // Extract as many data as possible from the intent
+	    String scheme = intent.getScheme();
+	    setTitle("Untitled");
+	    if (scheme.equals("content")) {
+	        setTitle("Dowloaded Content");
+	    } else if (scheme.equals("file")) {
+	        Uri uri = intent.getData();
+	        file = new File(uri.getPath());
+	        this.filename = file.getName();
+	        setTitle(filename);
+	    }
 
-		setContentView(R.layout.activity_rendered);
-
-		w = (WebView) findViewById(R.id.webView);
-
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+	    setContentView(R.layout.activity_rendered);
+	    w = (WebView) findViewById(R.id.webView);
+	    getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 	}
 
 	/*
