@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,11 +23,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.npaul.mdreader.R;
@@ -45,7 +48,7 @@ public class RenderedActivity extends Activity {
 	 *
 	 * @author Nathan Paul
 	 */
-	private class Renderer extends AsyncTask<Intent, Integer, CharSequence> {
+	private class Renderer extends AsyncTask<String, Integer, CharSequence> {
 		private MarkdownProcessor mdp;
 
 		/*
@@ -54,8 +57,8 @@ public class RenderedActivity extends Activity {
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		@Override
-		protected CharSequence doInBackground(Intent... params) {
-			String data = readInData(params[0]);
+		protected CharSequence doInBackground(String... params) {
+			String data = params[0];
 			mdp = new MarkdownProcessor();
 			// long startTime = System.currentTimeMillis();
 			CharSequence out = mdp.markdown(data);
@@ -141,6 +144,9 @@ public class RenderedActivity extends Activity {
 	private CharSequence src;
 	private File file;
 	private String filename;
+	String text = new String();
+	private boolean textChanged = false;
+    private boolean exitOnSave;
 
 	/*
 	 * (non-Javadoc)
@@ -154,7 +160,8 @@ public class RenderedActivity extends Activity {
 
 	    // Start rendering
 	    Intent intent = getIntent();
-	    new Renderer().execute(intent);
+	    text = readInData(intent);
+	    new Renderer().execute(text);
 
 	    // Extract as many data as possible from the intent
 	    String scheme = intent.getScheme();
@@ -193,6 +200,17 @@ public class RenderedActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_save:
+            if (file != null) {
+                saveFile(file);
+            } else {
+                saveAsCopy();
+            }
+
+        case R.id.menu_saveAs:
+            saveAsCopy();
+            return true;
+
 		case R.id.menu_saveashtml:
 			Uri data = getIntent().getData();
 			String filename = data.getPath();
@@ -222,6 +240,43 @@ public class RenderedActivity extends Activity {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Overrides the finish function to ensure that the changes in edit text
+	 * have been saved
+	 */
+	@Override
+	public void finish() {
+	    if (textChanged == true) {
+	        AlertDialog.Builder adb = new AlertDialog.Builder(context);
+	        adb.setTitle("Save Changes?");
+	        adb.setMessage("All unsaved work will be lost")
+	        .setNegativeButton("No",
+	                new DialogInterface.OnClickListener() {
+
+	            @Override
+	            public void onClick(DialogInterface dialog,
+	                    int which) {
+	                textChanged = false; // to stop endless loop
+	                finish();
+	            }
+	        })
+	        .setPositiveButton("Yes",
+	                new DialogInterface.OnClickListener() {
+
+	            @Override
+	            public void onClick(DialogInterface dialog,
+	                    int which) {
+	                exitOnSave = true; // set this because all
+	                // UI is run
+	                // asynchronously
+	                saveAsCopy();
+	            }
+	        }).show();
+	    } else {
+	        super.finish();
+	    }
 	}
 
 	/**
@@ -255,5 +310,115 @@ public class RenderedActivity extends Activity {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Shows a dialog box to enter a new name for a file
+	 */
+	private void saveAsCopy() {
+
+	    AlertDialog.Builder newBuilder = new AlertDialog.Builder(this);
+
+	    newBuilder.setTitle("Enter filename:");
+	    final EditText input = new EditText(this);
+
+	    if (file == null) {
+	        input.setText(Environment.getExternalStorageDirectory().getPath()
+	                + "/mdreader/" + ".md");
+	    } else {
+	        input.setText(file.getAbsolutePath());
+	    }
+	    newBuilder.setView(input).setPositiveButton("OK",
+	            new DialogInterface.OnClickListener() {
+
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            String value = input.getText().toString();
+	            File newFile = new File(value);
+	            try {
+	                if (newFile.createNewFile()) {
+	                    saveFile(newFile);
+	                } else {
+	                    fileExistsDialog(newFile);
+	                }
+	            } catch (IOException e) {
+
+	            }
+	        }
+
+	    });
+	    newBuilder.setNegativeButton("Cancel",
+	            new DialogInterface.OnClickListener() {
+
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            exitOnSave = false;
+	            // otherwise this would cause a bug where the
+	            // editActivity closed when the user hit "Save" next
+	        }
+	    });
+
+	    newBuilder.show();
+
+	}
+
+	/**
+	 * Saves a file to disk using the contents of the <code>EditText</code>
+	 *
+	 * @param fileToWrite
+	 *            The file where the data should be written
+	 */
+	private void saveFile(File fileToWrite) {
+	    try {
+	        FileOutputStream out = new FileOutputStream(fileToWrite);
+	        OutputStreamWriter outBuffer = new OutputStreamWriter(out);
+	        outBuffer.append(text);
+	        outBuffer.close();
+	        out.close();
+	    } catch (IOException e) {
+	        Toast.makeText(context,
+	                "Couldn't save your file, try another location",
+	                Toast.LENGTH_LONG).show();
+	    } finally {
+	        this.filename = fileToWrite.getName();
+	        setTitle(filename);
+	        textChanged = false;
+	        Toast.makeText(context,
+	                "Saved as: " + fileToWrite.getAbsolutePath(),
+	                Toast.LENGTH_LONG).show();
+	        if (exitOnSave) {
+	            finish();
+	        }
+	    }
+	}
+
+	/**
+	 * Displays a dialog saying the file exists and requests user choice on
+	 * whether to replace
+	 *
+	 * @param newFile
+	 *            The file attempting to be written to
+	 */
+	private void fileExistsDialog(final File newFile) {
+	    AlertDialog.Builder fe = new AlertDialog.Builder(this);
+	    fe.setTitle("File already exists")
+	    .setMessage("Overwrite?")
+	    .setPositiveButton("Yes",
+	            new DialogInterface.OnClickListener() {
+
+	        @Override
+	        public void onClick(DialogInterface dialog,
+	                int which) {
+	            saveFile(newFile);
+
+	        }
+	    })
+	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            saveAsCopy();
+	        }
+	    }).show();
 	}
 }
