@@ -34,10 +34,10 @@ import com.npaul.mdreader.R;
 
 /**
  * An activity to help editing Markdown documents
- * 
+ *
  * @author Nathan Paul
  * @version 1.1
- * 
+ *
  */
 public class EditActivity extends Activity {
 
@@ -50,7 +50,7 @@ public class EditActivity extends Activity {
 
 	/**
 	 * Used to surround items in the edit field with the parameters set
-	 * 
+	 *
 	 * @param text
 	 *            The characters to surround the text with
 	 */
@@ -66,7 +66,7 @@ public class EditActivity extends Activity {
 	/**
 	 * Displays a dialog saying the file exists and requests user choice on
 	 * whether to replace
-	 * 
+	 *
 	 * @param newFile
 	 *            The file attempting to be written to
 	 */
@@ -285,7 +285,7 @@ public class EditActivity extends Activity {
 
 	/**
 	 * Called by the Android system when the activity is opened by an intent
-	 * 
+	 *
 	 * @param intent
 	 *            The intent passed to the application
 	 */
@@ -295,7 +295,7 @@ public class EditActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -308,26 +308,22 @@ public class EditActivity extends Activity {
 		Intent intent = getIntent();
 		String scheme = intent.getScheme();
 		if (scheme.equals("content")) {
-			readInData(intent);
 			setTitle("Dowloaded Content");
 		} else if (scheme.equals("file")) {
 			Uri uri = intent.getData();
 			file = new File(uri.getPath());
 			this.filename = file.getName();
 			setTitle(filename);
-			// prevents 'null' appearing in edit when creating a new file or
-			// opening an empty file
-			if (file.length() != 0) {
-				readInData(intent);
-			}
 		}
+		readInData(intent);
+
 		initTextArea();
 		initButtons();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
@@ -338,7 +334,7 @@ public class EditActivity extends Activity {
 
 	/**
 	 * Responds to a menu press
-	 * 
+	 *
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
@@ -387,27 +383,32 @@ public class EditActivity extends Activity {
 
 	/**
 	 * Reads in the data from the intent and displays it in the text area
-	 * 
+	 *
 	 * @param intent
 	 *            The intent passed to the activity
 	 */
 	private void readInData(Intent intent) {
-		try {
-			InputStream in = getContentResolver().openInputStream(
-					intent.getData());
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(in));
-			String result = reader.readLine() + "\n";
-			String line;
-			while ((line = reader.readLine()) != null) {
-				result += "\n" + line;
-			}
-			t.setText(result);
-		} catch (FileNotFoundException e) {
+	    String result = new String();
+	    if (intent.getExtras() != null && intent.getExtras().containsKey("text")) {
+	        result = intent.getExtras().getString("text");
+	    } else {
+    		try {
+    			InputStream in = getContentResolver().openInputStream(
+    					intent.getData());
+    			BufferedReader reader = new BufferedReader(
+    					new InputStreamReader(in));
+    			String line = reader.readLine();
+    			while (line != null) {
+    				result += "\n" + line;
+    				line = reader.readLine();
+    			}
+    		} catch (FileNotFoundException e) {
 
-		} catch (IOException e) {
+    		} catch (IOException e) {
 
-		}
+    		}
+	    }
+	    t.setText(result);
 	}
 
 	private void renderText(boolean content) throws IOException,
@@ -474,7 +475,7 @@ public class EditActivity extends Activity {
 
 	/**
 	 * Saves a file to disk using the contents of the <code>EditText</code>
-	 * 
+	 *
 	 * @param fileToWrite
 	 *            The file where the data should be written
 	 */
