@@ -34,7 +34,7 @@ import com.npaul.mdreader.util.FileStringComparator;
 
 /**
  * An activity where the user can choose a file to edit using a file browser
- * 
+ *
  * @author Nathan Paul
  * @version 1.1
  */
@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
 
 	/**
 	 * Changes the directory to another and updates the file list as well
-	 * 
+	 *
 	 * @param directory
 	 *            the new directory to display
 	 * @param isPrevious
@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 
 	/**
 	 * Gets the files in a given directory and returns them in an arraylist
-	 * 
+	 *
 	 * @param DirectoryPath
 	 *            the full path to the directory
 	 * @return the file array, null if the directory is empty
@@ -168,7 +168,7 @@ public class MainActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -199,7 +199,7 @@ public class MainActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
@@ -211,7 +211,7 @@ public class MainActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
 	 */
 	@Override
@@ -234,7 +234,7 @@ public class MainActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
@@ -381,7 +381,7 @@ public class MainActivity extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see android.app.Activity#onResume()
 	 */
 	@Override
@@ -392,12 +392,12 @@ public class MainActivity extends Activity {
 
 	/**
 	 * Opens a given file in the edit activity
-	 * 
+	 *
 	 * @param file
 	 *            the file to be opened
 	 */
 	private void openFile(File file) {
-		Intent intent = new Intent(MainActivity.this, EditActivity.class);
+		Intent intent = new Intent(MainActivity.this, RenderedActivity.class);
 		intent.setData(Uri.fromFile(file));
 		MainActivity.this.startActivity(intent);
 

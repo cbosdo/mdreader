@@ -200,16 +200,22 @@ public class RenderedActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+
+		case R.id.menu_edit:
+		    editText();
+    		break;
+
 		case R.id.menu_save:
             if (file != null) {
                 saveFile(file);
             } else {
                 saveAsCopy();
             }
+            break;
 
         case R.id.menu_saveAs:
             saveAsCopy();
-            return true;
+            break;
 
 		case R.id.menu_saveashtml:
 			Uri data = getIntent().getData();
@@ -238,6 +244,7 @@ public class RenderedActivity extends Activity {
 			} catch (IOException e) {
 
 			}
+	        break;
 		}
 		return true;
 	}
@@ -420,5 +427,12 @@ public class RenderedActivity extends Activity {
 	            saveAsCopy();
 	        }
 	    }).show();
+	}
+
+	private void editText() {
+	    Intent intent = new Intent(RenderedActivity.this, EditActivity.class);
+        intent.setData(Uri.fromFile(file));
+        intent.putExtra("text", text);
+        RenderedActivity.this.startActivityForResult(intent, -1);
 	}
 }
