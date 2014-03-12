@@ -151,6 +151,8 @@ public class RenderedActivity extends Activity {
         }
     }
 
+    private static final int EDIT_CODE = 1;
+
     final Context context = this;
     private WebView w;
 
@@ -260,6 +262,14 @@ public class RenderedActivity extends Activity {
             break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
+            text = readInData(data);
+            new Renderer().execute(text);
+        }
     }
 
     /**
@@ -446,6 +456,6 @@ public class RenderedActivity extends Activity {
         Intent intent = new Intent(RenderedActivity.this, EditActivity.class);
         intent.setData(Uri.fromFile(file));
         intent.putExtra("text", text);
-        RenderedActivity.this.startActivityForResult(intent, -1);
+        RenderedActivity.this.startActivityForResult(intent, EDIT_CODE);
     }
 }

@@ -286,28 +286,20 @@ public class EditActivity extends Activity {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            break;
 
-            return true;
-
-        case R.id.menu_render:
-            try {
-                renderText(true);
-            } catch (IOException e) {
-                // should work
-            } catch (NullPointerException e) {
-                try {
-                    renderText(false);
-                } catch (NullPointerException e1) {
-                    // something went horribly wrong
-                } catch (IOException e1) {
-                    // something went horribly wrong
-                }
-            }
-            return true;
+        case R.id.menu_done:
+            Intent data = new Intent();
+            data.setData(getIntent().getData());
+            data.putExtra("text", t.getText().toString());
+            setResult(RESULT_OK, data);
+            finish();
+            break;
 
         default:
             return super.onOptionsItemSelected(item);
         }
+        return true;
     }
 
     /**
@@ -338,17 +330,5 @@ public class EditActivity extends Activity {
             }
         }
         t.setText(result);
-    }
-
-    private void renderText(boolean content) throws IOException,
-    NullPointerException {
-        CharSequence text = t.getText();
-
-        Intent intent = new Intent(EditActivity.this, RenderedActivity.class);
-        if (content) {
-            intent.setData(Uri.parse(file.toURI().toString()));
-        }
-        intent.putExtra("text", text);
-        EditActivity.this.startActivity(intent);
     }
 }
