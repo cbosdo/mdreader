@@ -1,3 +1,15 @@
+/*
+ * This software is provided under a Creative Commons Attribution-NonCommercial-
+ * ShareAlike 3.0 Unported license.
+ *
+ * You are free to Share and Remix this software, as long as you attribute the
+ * original owner, and release it under the same license. You may not use this
+ * work for commercial purposes.
+ *
+ * Full license available at: http://creativecommons.org/licenses/by-nc-sa/3.0/legalcode
+ *
+ * Copyright (c) 2013 Nathan Paul
+ */
 package com.npaul.mdreader.util;
 
 import java.io.File;
