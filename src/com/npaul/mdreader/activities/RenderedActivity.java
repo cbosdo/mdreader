@@ -326,10 +326,11 @@ public class RenderedActivity extends Activity {
                         intent.getData());
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(in));
-                String result = reader.readLine() + "\n";
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result += "\n" + line;
+                String result = new String();
+                String line = reader.readLine();
+                while (line != null) {
+                    result += line + "\n";
+                    line = reader.readLine();
                 }
                 return result;
             } catch (FileNotFoundException e) {
