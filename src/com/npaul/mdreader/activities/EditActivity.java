@@ -126,7 +126,7 @@ public class EditActivity extends Activity {
                 final EditText text = new EditText(context);
                 text.setHint("[Text]");
                 final EditText url = new EditText(context);
-                url.setHint("(http://www.google.com/)");
+                url.setHint("(http://acme.foobar.com/)");
                 url.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS); // switch
                 // off
                 // auto-suggest
