@@ -25,8 +25,7 @@ import java.io.OutputStreamWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.markdownj.MarkdownProcessor;
-
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,6 +45,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.npaul.mdreader.R;
+import com.npaul.mdreader.util.FoldingFilter;
+import com.npaul.mdreader.util.Formatter;
 
 /**
  * An activity that renders markdown on screen using MarkdownJ -
@@ -62,7 +63,6 @@ public class RenderedActivity extends Activity {
      * @author Nathan Paul
      */
     private class Renderer extends AsyncTask<String, Integer, CharSequence> {
-        private MarkdownProcessor mdp;
 
         /*
          * (non-Javadoc)
@@ -72,13 +72,11 @@ public class RenderedActivity extends Activity {
         @Override
         protected CharSequence doInBackground(String... params) {
             String data = params[0];
-            mdp = new MarkdownProcessor();
-            // long startTime = System.currentTimeMillis();
-            CharSequence out = mdp.markdown(data);
-            // long endTime = System.currentTimeMillis();
-            // System.out.println("took: " + (endTime-startTime) + "ms");
-            src = out;
-            return out;
+            Formatter formatter = new Formatter();
+            formatter.addFilter(new FoldingFilter());
+
+            src = formatter.format(data);
+            return src;
         }
 
         /*
@@ -86,6 +84,7 @@ public class RenderedActivity extends Activity {
          *
          * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
          */
+        @SuppressLint("SetJavaScriptEnabled")
         @Override
         protected void onPostExecute(CharSequence result) {
             findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
@@ -99,7 +98,14 @@ public class RenderedActivity extends Activity {
             }
             WebSettings ws = w.getSettings();
             ws.setTextZoom(70);
-            w.getSettings().setBuiltInZoomControls(true);
+            ws.setMinimumFontSize(10);
+            ws.setJavaScriptEnabled(true);
+            ws.setBuiltInZoomControls(true);
+
+            String resultString = "";
+            if (result != null)
+                resultString = result.toString();
+
             try {
                 // get the file path
                 String dir = getIntent().getData().getPath().toString();
@@ -109,12 +115,12 @@ public class RenderedActivity extends Activity {
                 }
                 dir = dir.substring(0, i);
                 // load with images if its a file on the local system
-                w.loadDataWithBaseURL("file://" + dir + "/", (String) result,
+                w.loadDataWithBaseURL("file://" + dir + "/", resultString,
                         "text/html", "utf-8", null);
             } catch (NullPointerException e) {
                 // load without baseURL (pictures won't work)
-                w.loadData((String) result, "text/html", "utf-8");
-                if (result.toString().contains("<img ")) {
+                w.loadData(resultString, "text/html", "utf-8");
+                if (resultString.contains("<img ")) {
                     AlertDialog.Builder adb = new AlertDialog.Builder(context);
                     adb.setTitle("Images can't be read");
                     adb.setMessage(
@@ -134,8 +140,6 @@ public class RenderedActivity extends Activity {
                             }).show();
                 }
             }
-            mdp = null; // delete the large amount of memory being used, next
-            // time garbage collection comes along
         }
 
         private String getDocTitle(CharSequence result) {
