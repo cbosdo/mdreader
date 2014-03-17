@@ -47,6 +47,7 @@ import android.widget.Toast;
 import com.npaul.mdreader.R;
 import com.npaul.mdreader.util.FoldingFilter;
 import com.npaul.mdreader.util.Formatter;
+import com.npaul.mdreader.util.StyleFilter;
 
 /**
  * An activity that renders markdown on screen using MarkdownJ -
@@ -73,6 +74,7 @@ public class RenderedActivity extends Activity {
         protected CharSequence doInBackground(String... params) {
             String data = params[0];
             Formatter formatter = new Formatter();
+            formatter.addFilter(new StyleFilter());
             formatter.addFilter(new FoldingFilter());
 
             src = formatter.format(data);
