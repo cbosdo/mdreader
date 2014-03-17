@@ -20,37 +20,12 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.npaul.mdreader.activities.EditActivity"
             android:label="@string/title_activity_edit" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:host="*" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*.md" />
-                <data android:pathPattern=".*.txt" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:host="*"
-                    android:mimeType="application/octet-stream"
-                    android:scheme="content" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.RenderedActivity"
@@ -59,7 +34,6 @@
             android:theme="@style/AppBaseTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -71,6 +45,14 @@
                 <data android:mimeType="*/*" />
                 <data android:pathPattern=".*.md" />
                 <data android:pathPattern=".*.txt" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="*"
+                    android:mimeType="application/octet-stream"
+                    android:scheme="content" />
             </intent-filter>
         </activity>
 

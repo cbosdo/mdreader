@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -125,14 +126,11 @@ public class EditActivity extends Activity {
                 // set up the text fields for entry
                 final EditText text = new EditText(context);
                 text.setHint("[Text]");
+
+                // Switch off auto-suggest for this field
                 final EditText url = new EditText(context);
                 url.setHint("(http://acme.foobar.com/)");
-                url.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS); // switch
-                // off
-                // auto-suggest
-                // for
-                // this
-                // field
+                url.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 url.setOnFocusChangeListener(new OnFocusChangeListener() {
 
                     @Override
@@ -260,6 +258,9 @@ public class EditActivity extends Activity {
 
         initTextArea();
         initButtons();
+
+        // Don't show the application icon
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
     }
 
     /*
@@ -281,12 +282,6 @@ public class EditActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            // app icon in action bar clicked; go home
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            break;
 
         case R.id.menu_done:
             Intent data = new Intent();

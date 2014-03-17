@@ -47,14 +47,14 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="#" />
+                android:text="@string/hash" />
 
             <Button
                 android:id="@+id/btn_bold"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="B"
+                android:text="@string/b"
                 android:textStyle="bold" />
 
             <Button
@@ -62,7 +62,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="I"
+                android:text="@string/i"
                 android:textStyle="italic" />
 
             <Button
@@ -70,7 +70,7 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="[URL]" />
+                android:text="@string/url" />
 
             <Button
                 android:id="@+id/btn_code"

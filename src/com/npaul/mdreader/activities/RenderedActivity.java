@@ -198,6 +198,8 @@ public class RenderedActivity extends Activity {
 
         setContentView(R.layout.activity_rendered);
         w = (WebView) findViewById(R.id.webView);
+
+        // Don't show the application icon
         getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
     }
 

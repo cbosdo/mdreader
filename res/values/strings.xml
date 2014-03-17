@@ -20,5 +20,9 @@
     <string name="btn_tab">&#x21E5;</string>
     <string name="btn_code">&#x0060;code&#x0060;</string>
     <string name="menu_newfolder">New Folder</string>
+    <string name="b">B</string>
+    <string name="i">I</string>
+    <string name="url">[URL]</string>
+    <string name="hash">#</string>
 
 </resources>
