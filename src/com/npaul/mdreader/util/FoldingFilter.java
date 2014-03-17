@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * @author Cedric Bosdonnat <cedric.bosdonnat@free.fr>
  *
  */
-public class FoldingFilter implements Filter {
+public class FoldingFilter extends Filter {
 
     @Override
     public CharSequence filter(CharSequence in) {
@@ -97,44 +97,6 @@ public class FoldingFilter implements Filter {
         if (in.toString().indexOf(include) == -1)
             return appendToBody(in, include);
         return in;
-    }
-
-    protected CharSequence appendToHead(CharSequence in, String content) {
-        StringBuffer out = new StringBuffer();
-
-        Matcher m = Pattern.compile("</head>", Pattern.CASE_INSENSITIVE).matcher(in);
-        int pos = in.length();
-        String toAppend = content;
-        if (m.find()) {
-            pos = m.start();
-        } else {
-            m = Pattern.compile("<html>", Pattern.CASE_INSENSITIVE).matcher(in);
-            pos = 0;
-            if (m.find()) {
-                pos = m.end();
-            }
-            toAppend = "<head>" + content + "</head>";
-        }
-        out.append(in.subSequence(0, pos));
-        out.append(toAppend);
-        out.append(in.subSequence(pos, in.length()));
-
-        return out;
-    }
-
-    protected CharSequence appendToBody(CharSequence in, String content) {
-        StringBuffer out = new StringBuffer();
-
-        Matcher m = Pattern.compile("</body>", Pattern.CASE_INSENSITIVE).matcher(in);
-        int pos = in.length();
-        if (m.find()) {
-            pos = m.start();
-        }
-        out.append(in.subSequence(0, pos));
-        out.append(content);
-        out.append(in.subSequence(pos, in.length()));
-
-        return out;
     }
 
 }
