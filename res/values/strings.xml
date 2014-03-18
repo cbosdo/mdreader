@@ -45,5 +45,7 @@
     <string name="save_changes_message">All unsaved work will be lost</string>
     <string name="untitled_title">Untitled</string>
     <string name="overwrite">Overwrite?</string>
+    <string name="link_text_hint">Text</string>
+    <string name="link_url_hint">http://your.url/here/</string>
 
 </resources>

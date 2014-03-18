@@ -125,19 +125,18 @@ public class EditActivity extends Activity {
             public void onClick(View v) {
                 // set up the text fields for entry
                 final EditText text = new EditText(context);
-                text.setHint("[Text]");
+                text.setHint(R.string.link_text_hint);
 
                 // Switch off auto-suggest for this field
                 final EditText url = new EditText(context);
-                url.setHint("(http://acme.foobar.com/)");
+                url.setHint(R.string.link_url_hint);
                 url.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                 url.setOnFocusChangeListener(new OnFocusChangeListener() {
 
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        url.setText("http://www.");
+                        url.setText("http://");
                         url.setSelection(url.getText().length() - 1);
-
                     }
 
                 });
