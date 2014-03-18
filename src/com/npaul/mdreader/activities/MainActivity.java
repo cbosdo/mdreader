@@ -106,11 +106,11 @@ public class MainActivity extends Activity {
         f.mkdirs();
         File[] files = f.listFiles();
         if ((files.length == 0) || (files == null)) {
-
             return null;
         } else {
             for (int i = 0; i < files.length; i++) {
-                if (!files[i].isHidden()) {
+                File file = files[i];
+                if (!file.isHidden() && (!file.isFile() || file.getName().endsWith(".md"))) {
                     fileArray.add(files[i]);
                 }
             }
