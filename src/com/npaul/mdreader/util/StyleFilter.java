@@ -17,11 +17,22 @@ public class StyleFilter extends Filter {
     @Override
     public CharSequence filter(CharSequence in) {
         String css = "<style>"
-                + "p {"
-                + "    font-size: 2em;"
+                + "p, li, pre {"
+                + "    font-size: 16pt;"
                 + "}"
                 + "h1 {"
-                + "    font-size: 2.5em;"
+                + "    font-size: 22pt;"
+                + "}"
+                + "li {"
+                + "    margin-left: 5pt;"
+                + "}"
+                + "ul li {"
+                + "    list-style-type: square;"
+                + "}"
+                + "blockquote, pre {"
+                + "    border-left: 3px solid #ccc;"
+                + "    margin-left: 10pt;"
+                + "    padding-left: 10pt;"
                 + "}"
                 + "</style>";
 
