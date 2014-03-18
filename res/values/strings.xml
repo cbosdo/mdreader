@@ -24,5 +24,26 @@
     <string name="i">I</string>
     <string name="url">[URL]</string>
     <string name="hash">#</string>
+    <string name="delete_confirmation">Are you sure you want to delete %s?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="generic_error_message">Something went wrong</string>
+    <string name="press_back_once_more_to_exit">Press \"back\" once more to exit</string>
+    <string name="ok">OK</string>
+    <string name="enter_filename">Enter filename:</string>
+    <string name="file_already_exists">File already exists</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_folder_name">Enter folder name</string>
+    <string name="folder_already_exists">Folder already exists</string>
+    <string name="enter_url">Enter URL:</string>
+    <string name="dowloaded_content_title">Dowloaded Content</string>
+    <string name="images_read_error_title">Images can\'t be read</string>
+    <string name="images_read_error_message">Save a local copy of the file to your device then try again</string>
+    <string name="saved_as_info">Saved as: %s</string>
+    <string name="file_save_error">Couldn\'t save the file for some reason</string>
+    <string name="save_changes_title">Save Changes?</string>
+    <string name="save_changes_message">All unsaved work will be lost</string>
+    <string name="untitled_title">Untitled</string>
+    <string name="overwrite">Overwrite?</string>
 
 </resources>

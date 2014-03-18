@@ -150,9 +150,10 @@ public class MainActivity extends Activity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v
                         .getContext());
                 builder.setTitle(R.string.delete_title);
-                builder.setMessage("Are you sure you want to delete "
-                        + files.get(position).getName() + "?");
-                builder.setPositiveButton("Yes",
+                String message = String.format(getString(R.string.delete_confirmation),
+                                               files.get(position).getName());
+                builder.setMessage(message);
+                builder.setPositiveButton(R.string.yes,
                         new DialogInterface.OnClickListener() {
 
                     @Override
@@ -162,7 +163,7 @@ public class MainActivity extends Activity {
                         refreshFileList();
                     }
                 });
-                builder.setNegativeButton("No",
+                builder.setNegativeButton(R.string.no,
                         new DialogInterface.OnClickListener() {
 
                     @Override
@@ -205,8 +206,8 @@ public class MainActivity extends Activity {
             changeDirectory(currentDirectory, false);
             changeDirectory(mdReaderDir.toString(), false);
         } catch (NullPointerException e) {
-            Toast.makeText(this, "There was an error", Toast.LENGTH_LONG)
-            .show();
+            Toast.makeText(this, R.string.generic_error_message,
+                           Toast.LENGTH_LONG).show();
         }
     }
 
@@ -233,7 +234,7 @@ public class MainActivity extends Activity {
             if (!dirHistory.isEmpty()) {
                 changeDirectory(dirHistory.pop(), true);
                 if (dirHistory.size() == 0) {
-                    Toast.makeText(context, "Press \"back\" once more to exit",
+                    Toast.makeText(context, R.string.press_back_once_more_to_exit,
                             Toast.LENGTH_LONG).show();
                     return true;
                 }
@@ -271,14 +272,14 @@ public class MainActivity extends Activity {
                 wv.loadData(text, "text/html", null);
             } catch (IOException e1) {
                 // should never get here though
-                Toast.makeText(context, "Something went wrong",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.generic_error_message,
+                               Toast.LENGTH_LONG).show();
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.menu_about);
             builder.setView(wv);
-            builder.setPositiveButton("OK",
+            builder.setPositiveButton(R.string.ok,
                     new DialogInterface.OnClickListener() {
 
                 @Override
@@ -297,12 +298,13 @@ public class MainActivity extends Activity {
             // new
         case R.id.menu_new:
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
-            adb.setTitle("Enter filename:");
+            adb.setTitle(R.string.enter_filename);
             final EditText input = new EditText(this);
-            input.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS); // switch off autosuggest for this field
+            // switch off autosuggest for this field
+            input.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             input.setText(".md");
             adb.setView(input);
-            adb.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            adb.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -310,17 +312,17 @@ public class MainActivity extends Activity {
                     File newFile = new File(currentDirectory + "/" + value);
                     try {
                         if (!newFile.createNewFile()) {
-                            Toast.makeText(context, "This file already exists",
+                            Toast.makeText(context, R.string.file_already_exists,
                                     Toast.LENGTH_LONG).show();
                         }
                     } catch (IOException e) {
-                        Toast.makeText(context, "Something went wrong",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, R.string.generic_error_message,
+                                       Toast.LENGTH_LONG).show();
                     }
                     openFile(newFile);
                 }
             });
-            adb.setNegativeButton("Cancel",
+            adb.setNegativeButton(R.string.cancel,
                     new DialogInterface.OnClickListener() {
 
                 @Override
@@ -343,9 +345,9 @@ public class MainActivity extends Activity {
 
             AlertDialog.Builder adb2 = new AlertDialog.Builder(context);
 
-            adb2.setTitle("Enter folder name")
-            .setView(et)
-            .setPositiveButton("OK",
+            adb2.setTitle(R.string.enter_folder_name)
+                .setView(et)
+                .setPositiveButton(R.string.ok,
                     new DialogInterface.OnClickListener() {
 
                 @Override
@@ -358,12 +360,12 @@ public class MainActivity extends Activity {
                         refreshFileList();
                     } else {
                         Toast.makeText(context,
-                                "This folder already exists",
+                                R.string.folder_already_exists,
                                 Toast.LENGTH_LONG).show();
                     }
                 }
             })
-            .setNegativeButton("Cancel",
+            .setNegativeButton(R.string.cancel,
                     new DialogInterface.OnClickListener() {
 
                 @Override
@@ -382,12 +384,7 @@ public class MainActivity extends Activity {
 
             return true;
 
-            // capture if not defined yet - mainly used for development, the
-            // user should never see this message
         default:
-            Toast.makeText(context,
-                    "This hasn't been defined yet. ID: " + item.getTitle(),
-                    Toast.LENGTH_LONG).show();
             return super.onOptionsItemSelected(item);
         }
     }

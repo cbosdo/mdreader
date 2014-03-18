@@ -154,8 +154,8 @@ public class EditActivity extends Activity {
 
                 // build the dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Enter URL:");
-                builder.setView(layout).setPositiveButton("OK",
+                builder.setTitle(R.string.enter_url);
+                builder.setView(layout).setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
 
                     @Override
@@ -247,7 +247,7 @@ public class EditActivity extends Activity {
         Intent intent = getIntent();
         String scheme = intent.getScheme();
         if (scheme.equals("content")) {
-            setTitle("Dowloaded Content");
+            setTitle(R.string.dowloaded_content_title);
         } else if (scheme.equals("file")) {
             Uri uri = intent.getData();
             file = new File(uri.getPath());

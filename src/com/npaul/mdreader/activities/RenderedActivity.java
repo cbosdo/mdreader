@@ -124,12 +124,12 @@ public class RenderedActivity extends Activity {
                 w.loadData(resultString, "text/html", "utf-8");
                 if (resultString.contains("<img ")) {
                     AlertDialog.Builder adb = new AlertDialog.Builder(context);
-                    adb.setTitle("Images can't be read");
+                    adb.setTitle(R.string.images_read_error_title);
                     adb.setMessage(
-                            "Save a local copy of the file to your device then try again")
+                            R.string.images_read_error_message)
                             .setCancelable(false)
                             .setIcon(R.drawable.file)
-                            .setPositiveButton("OK",
+                            .setPositiveButton(R.string.ok,
                                     new DialogInterface.OnClickListener() {
 
                                 @Override
@@ -186,9 +186,9 @@ public class RenderedActivity extends Activity {
 
         // Extract as many data as possible from the intent
         String scheme = intent.getScheme();
-        setTitle("Untitled");
+        setTitle(R.string.untitled_title);
         if (scheme.equals("content")) {
-            setTitle("Dowloaded Content");
+            setTitle(R.string.dowloaded_content_title);
         } else if (scheme.equals("file")) {
             Uri uri = intent.getData();
             file = new File(uri.getPath());
@@ -258,11 +258,11 @@ public class RenderedActivity extends Activity {
                 out.write(content);
                 out.flush();
                 out.close();
-                Toast.makeText(context, "Saved as: " + file.getPath(),
+                Toast.makeText(context, String.format(getString(R.string.saved_as_info), file.getPath()),
                         Toast.LENGTH_LONG).show();
             } catch (FileNotFoundException e) {
                 Toast.makeText(context,
-                        "Couldn't save the file for some reason",
+                        R.string.file_save_error,
                         Toast.LENGTH_LONG).show();
             } catch (IOException e) {
 
@@ -288,9 +288,9 @@ public class RenderedActivity extends Activity {
     public void finish() {
         if (textChanged == true) {
             AlertDialog.Builder adb = new AlertDialog.Builder(context);
-            adb.setTitle("Save Changes?");
-            adb.setMessage("All unsaved work will be lost")
-            .setNegativeButton("No",
+            adb.setTitle(R.string.save_changes_title);
+            adb.setMessage(R.string.save_changes_message)
+               .setNegativeButton(R.string.no,
                     new DialogInterface.OnClickListener() {
 
                 @Override
@@ -300,7 +300,7 @@ public class RenderedActivity extends Activity {
                     finish();
                 }
             })
-            .setPositiveButton("Yes",
+            .setPositiveButton(R.string.yes,
                     new DialogInterface.OnClickListener() {
 
                 @Override
@@ -358,7 +358,7 @@ public class RenderedActivity extends Activity {
 
         AlertDialog.Builder newBuilder = new AlertDialog.Builder(this);
 
-        newBuilder.setTitle("Enter filename:");
+        newBuilder.setTitle(R.string.enter_filename);
         final EditText input = new EditText(this);
 
         if (file == null) {
@@ -367,7 +367,7 @@ public class RenderedActivity extends Activity {
         } else {
             input.setText(file.getAbsolutePath());
         }
-        newBuilder.setView(input).setPositiveButton("OK",
+        newBuilder.setView(input).setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
 
             @Override
@@ -386,7 +386,7 @@ public class RenderedActivity extends Activity {
             }
 
         });
-        newBuilder.setNegativeButton("Cancel",
+        newBuilder.setNegativeButton(R.string.cancel,
                 new DialogInterface.OnClickListener() {
 
             @Override
@@ -416,14 +416,15 @@ public class RenderedActivity extends Activity {
             out.close();
         } catch (IOException e) {
             Toast.makeText(context,
-                    "Couldn't save your file, try another location",
+                    R.string.saved_as_info,
                     Toast.LENGTH_LONG).show();
         } finally {
             this.filename = fileToWrite.getName();
             setTitle(filename);
             textChanged = false;
             Toast.makeText(context,
-                    "Saved as: " + fileToWrite.getAbsolutePath(),
+                    String.format(getString(R.string.saved_as_info),
+                                  fileToWrite.getAbsolutePath()),
                     Toast.LENGTH_LONG).show();
             if (exitOnSave) {
                 finish();
@@ -440,9 +441,9 @@ public class RenderedActivity extends Activity {
      */
     private void fileExistsDialog(final File newFile) {
         AlertDialog.Builder fe = new AlertDialog.Builder(this);
-        fe.setTitle("File already exists")
-        .setMessage("Overwrite?")
-        .setPositiveButton("Yes",
+        fe.setTitle(R.string.file_already_exists)
+        .setMessage(R.string.overwrite)
+        .setPositiveButton(R.string.yes,
                 new DialogInterface.OnClickListener() {
 
             @Override
@@ -452,7 +453,7 @@ public class RenderedActivity extends Activity {
 
             }
         })
-        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
