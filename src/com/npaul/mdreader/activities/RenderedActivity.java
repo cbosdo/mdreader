@@ -215,6 +215,16 @@ public class RenderedActivity extends Activity {
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean result = super.onPrepareOptionsMenu(menu);
+
+        MenuItem item = menu.findItem(R.id.menu_save);
+        if (item != null)
+            item.setVisible(textChanged);
+
+        return result;
+    }
     /*
      * (non-Javadoc)
      *
@@ -276,6 +286,9 @@ public class RenderedActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
             text = readInData(data);
+            textChanged = true;
+            invalidateOptionsMenu();
+
             new Renderer().execute(text);
         }
     }
