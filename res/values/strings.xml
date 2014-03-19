@@ -9,7 +9,6 @@
     <string name="menu_save">Save</string>
     <string name="menu_edit">Edit</string>
     <string name="delete_title">Delete?</string>
-    <string name="delete_detail">Are you sure you want to delete </string>
     <string name="title_activity_edit">MdReader Edit</string>
     <string name="title_activity_rendered">MdReader View</string>
     <string name="menu_saveAs">Save As&#8230;</string>
