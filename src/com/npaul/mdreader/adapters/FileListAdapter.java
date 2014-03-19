@@ -112,13 +112,16 @@ public class FileListAdapter extends ArrayAdapter<File> {
         if (fli != null){
             fih.name.setText(fli.getName());
             if (fli.isDirectory()){
-                fih.detail.setText("Directory");
+                fih.detail.setText(R.string.directory);
                 fih.detail.setTextColor(Color.GRAY);
                 fih.image.setImageResource(R.drawable.folder);
             } else {
                 long lastModified = fli.lastModified();
-                fih.detail.setText("Last Modified: " + DateFormat.getDateFormat(getContext()).format(lastModified) +
-                        " " + DateFormat.getTimeFormat(getContext()).format(lastModified));
+                String date = DateFormat.getDateFormat(getContext()).format(lastModified);
+                String time = DateFormat.getTimeFormat(getContext()).format(lastModified);
+                String dateTime = date + " " + time;
+                fih.detail.setText(String.format(getContext().getString(R.string.last_modified),
+                                                 dateTime));
                 fih.detail.setTextColor(Color.BLACK);
                 fih.image.setImageResource(R.drawable.file);
             }
