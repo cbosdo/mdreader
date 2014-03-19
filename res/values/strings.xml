@@ -3,8 +3,6 @@
 
     <string name="app_name">MdReader</string>
     <string name="menu_about">About</string>
-    <string name="title_activity_edit">Md Edit</string>
-    <string name="about_text">A markdown editor application by Nathan Paul.\n&lt;a href=&quot;mailto:test@hello.com&quot;&gt;nathanp582@gmail.com&lt;/a&gt;\n\nThis software is provided AS IS and comes with absolutely NO WARRANTY</string>
     <string name="menu_done">Done</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_new">New</string>
@@ -12,11 +10,9 @@
     <string name="menu_edit">Edit</string>
     <string name="delete_title">Delete?</string>
     <string name="delete_detail">Are you sure you want to delete </string>
-    <string name="title_activity_rendered">Md View</string>
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="menu_saveHTML">Save as HTML</string>
+    <string name="title_activity_edit">MdReader Edit</string>
+    <string name="title_activity_rendered">MdReader View</string>
     <string name="menu_saveAs">Save As&#8230;</string>
-    <string name="menu_quickRef">Quick Reference</string>
     <string name="btn_tab">&#x21E5;</string>
     <string name="btn_code">&#x0060;code&#x0060;</string>
     <string name="menu_newfolder">New Folder</string>
@@ -24,7 +20,7 @@
     <string name="i">I</string>
     <string name="url">[URL]</string>
     <string name="hash">#</string>
-    <string name="delete_confirmation">Are you sure you want to delete %s?</string>
+    <string name="delete_confirmation">Really delete %s?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="generic_error_message">Something went wrong</string>

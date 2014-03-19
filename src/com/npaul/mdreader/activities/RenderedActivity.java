@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -248,35 +247,6 @@ public class RenderedActivity extends Activity {
 
         case R.id.menu_saveAs:
             saveAsCopy();
-            break;
-
-        case R.id.menu_saveashtml:
-            Uri data = getIntent().getData();
-            String filename = data.getPath();
-            int i = filename.length() - 1;
-            while (filename.charAt(i) != '.') {
-                i--;
-            }
-            filename = filename.substring(0, i);
-            File file = new File(filename + ".html");
-            try {
-                OutputStream out = new FileOutputStream(file);
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                byte[] content = src.toString().getBytes();
-                out.write(content);
-                out.flush();
-                out.close();
-                Toast.makeText(context, String.format(getString(R.string.saved_as_info), file.getPath()),
-                        Toast.LENGTH_LONG).show();
-            } catch (FileNotFoundException e) {
-                Toast.makeText(context,
-                        R.string.file_save_error,
-                        Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-
-            }
             break;
         }
         return true;
