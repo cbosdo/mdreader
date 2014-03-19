@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MdReader</string>
+    <string name="menu_about">A propos</string>
+    <string name="menu_done">Done</string>
+    <string name="menu_refresh">Actualiser</string>
+    <string name="menu_new">Nouveau</string>
+    <string name="menu_save">Enregistrer</string>
+    <string name="menu_edit">Editer</string>
+    <string name="delete_title">Supprimer?</string>
+    <string name="title_activity_edit">MdReader Edit</string>
+    <string name="title_activity_rendered">MdReader View</string>
+    <string name="menu_saveAs">Enregistrer sous&#8230;</string>
+    <string name="btn_tab">&#x21E5;</string>
+    <string name="btn_code">&#x0060;code&#x0060;</string>
+    <string name="menu_newfolder">Nouveau Répertoire</string>
+    <string name="b">G</string>
+    <string name="i">I</string>
+    <string name="url">[URL]</string>
+    <string name="hash">#</string>
+    <string name="delete_confirmation">Vraiment supprimer %s?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="generic_error_message">Une erreur est survenue</string>
+    <string name="press_back_once_more_to_exit">Appuyer \"Retour\" encore une fois pour fermer</string>
+    <string name="ok">OK</string>
+    <string name="enter_filename">Saisir le nom de fichier:</string>
+    <string name="file_already_exists">Fichier déjà existant</string>
+    <string name="cancel">Annuler</string>
+    <string name="enter_folder_name">Saisir le nom du répertoire:</string>
+    <string name="folder_already_exists">Répertoire déjà existant</string>
+    <string name="enter_url">Saisir l\'URL:</string>
+    <string name="dowloaded_content_title">Contenu Téléchargé</string>
+    <string name="images_read_error_title">Impossible de charger les images</string>
+    <string name="images_read_error_message">Enregistrer une copie locale du fichier sur votre appareil et essayez à nouveau</string>
+    <string name="saved_as_info">Enregistré sous: %s</string>
+    <string name="file_save_error">Erreur survenue lors de l\'enregistrement du fichier</string>
+    <string name="save_changes_title">Enregistrer les modifications?</string>
+    <string name="save_changes_message">Le travail non enregistré sera perdu</string>
+    <string name="untitled_title">Sans Titre</string>
+    <string name="overwrite">Remplacer?</string>
+    <string name="link_text_hint">Texte</string>
+    <string name="link_url_hint">http://votre.url/ici/</string>
+    <string name="directory">Répertoire</string>
+    <string name="last_modified">Dernière Modification: %s</string>
+
+</resources>
