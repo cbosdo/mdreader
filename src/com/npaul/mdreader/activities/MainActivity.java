@@ -30,12 +30,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
+import android.view.ActionMode.Callback;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -60,6 +64,7 @@ public class MainActivity extends Activity {
     private String currentDirectory;
     private Stack<String> dirHistory = new Stack<String>();
     private int index;
+    private FileListAdapter adapter;
 
     /**
      * Changes the directory to another and updates the file list as well
@@ -125,55 +130,28 @@ public class MainActivity extends Activity {
      */
     private void initFileListView() {
         lv = (ListView) findViewById(R.id.list);
-        lv.setAdapter(new FileListAdapter(this, R.layout.file_browser_item,
-                files));
+        adapter = new FileListAdapter(this, R.layout.file_browser_item, files);
+        lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View v,
-                    int position, long id) {
-
-                if (files.get(position).isDirectory()) {
-                    changeDirectory(files.get(position).getPath(), false);
-                } else {
-                    openFile(files.get(position));
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                if (lv.getChoiceMode() == AbsListView.CHOICE_MODE_NONE) {
+                    if (files.get(position).isDirectory()) {
+                        changeDirectory(files.get(position).getPath(), false);
+                    } else {
+                        openFile(files.get(position));
+                    }
                 }
-
             }
-
         });
 
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View v,
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
                     final int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v
-                        .getContext());
-                builder.setTitle(R.string.delete_title);
-                String message = String.format(getString(R.string.delete_confirmation),
-                                               files.get(position).getName());
-                builder.setMessage(message);
-                builder.setPositiveButton(R.string.yes,
-                        new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog,
-                            int which) {
-                        files.get(position).delete();
-                        refreshFileList();
-                    }
-                });
-                builder.setNegativeButton(R.string.no,
-                        new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog,
-                            int which) {
-                        // do nothing
-                    }
-                });
-
-                builder.show();
+                startActionMode(new SelectMode());
+                lv.setItemChecked(position, true);
 
                 return true;
             }
@@ -432,5 +410,74 @@ public class MainActivity extends Activity {
         } else {
             lv.setSelectionFromTop(0, 0);
         }
+    }
+
+
+    /**
+     * Class responsible for the selection mode (enabled after long click).
+     *
+     */
+    public class SelectMode implements Callback {
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            int id = item.getItemId();
+            switch (id) {
+                case R.id.menu_delete:
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(lv.getContext());
+                    builder.setTitle(R.string.delete_title);
+
+                    builder.setMessage(R.string.delete_confirmation);
+                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SparseBooleanArray allPositions = lv.getCheckedItemPositions();
+                            for (int i = 0; i < allPositions.size(); i++) {
+                                int position = allPositions.keyAt(i);
+                                if (allPositions.get(position)) {
+                                    files.get(position).delete();
+                                }
+                            }
+                            refreshFileList();
+                        }
+                    });
+
+                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    });
+
+                    builder.show();
+                }
+                break;
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Populate with the actions
+            mode.getMenuInflater().inflate(R.menu.activity_main_select, menu);
+
+            // Switch the list view to selection mode
+            lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+            lv.invalidateViews();
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            lv.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
+            lv.invalidateViews();
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+
     }
 }

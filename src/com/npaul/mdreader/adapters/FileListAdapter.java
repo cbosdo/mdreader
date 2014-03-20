@@ -22,8 +22,11 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.npaul.mdreader.R;
@@ -52,41 +55,11 @@ public class FileListAdapter extends ArrayAdapter<File> {
 
     }
 
-    /* (non-Javadoc)
-     * @see android.widget.Adapter#getCount()
-     */
-    @Override
-    public int getCount() {
-        if(files == null)
-            return 0;
-        else
-            return files.size();
-    }
-
-    /* (non-Javadoc)
-     * @see android.widget.Adapter#getItem(int)
-     */
-    @Override
-    public File getItem(int item) {
-        if(files == null)
-            return null;
-        else
-            return files.get(item);
-    }
-
-    /* (non-Javadoc)
-     * @see android.widget.Adapter#getItemId(int)
-     */
-    @Override
-    public long getItemId(int arg0) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
     private static class FileItemHolder {
         TextView name;
         TextView detail;
         ImageView image;
+        CheckBox checkbox;
     }
 
     /* (non-Javadoc)
@@ -94,6 +67,8 @@ public class FileListAdapter extends ArrayAdapter<File> {
      */
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
+        ListView listview = ((ListView)parent);
+        boolean showCheckboxes = listview.getChoiceMode() != AbsListView.CHOICE_MODE_NONE;
 
         View v = convertView;
         if (convertView == null) {
@@ -101,12 +76,16 @@ public class FileListAdapter extends ArrayAdapter<File> {
             v = mInflater.inflate(R.layout.file_browser_item, null);
 
             fih = new FileItemHolder();
+            fih.checkbox = (CheckBox) v.findViewById(R.id.file_checkbox);
             fih.name = (TextView) v.findViewById(R.id.file_name);
             fih.detail = (TextView) v.findViewById(R.id.file_detail);
             fih.image = (ImageView) v.findViewById(R.id.icon_listitem);
             v.setTag(fih);
-        } else fih = (FileItemHolder) v.getTag();
+        } else {
+            fih = (FileItemHolder) v.getTag();
+        }
 
+        fih.checkbox.setVisibility(showCheckboxes ? View.VISIBLE : View.INVISIBLE);
         File fli = files.get(pos);
 
         if (fli != null){
@@ -128,8 +107,6 @@ public class FileListAdapter extends ArrayAdapter<File> {
         }
 
         return v;
-
-
     }
 
 }

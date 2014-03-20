@@ -8,7 +8,8 @@
     <string name="menu_new">New</string>
     <string name="menu_save">Save</string>
     <string name="menu_edit">Edit</string>
-    <string name="delete_title">Delete?</string>
+    <string name="menu_delete">Delete</string>
+    <string name="delete_title">Confirm Deletion</string>
     <string name="title_activity_edit">MdReader Edit</string>
     <string name="title_activity_rendered">MdReader View</string>
     <string name="menu_saveAs">Save As&#8230;</string>
@@ -19,7 +20,7 @@
     <string name="i">I</string>
     <string name="url">[URL]</string>
     <string name="hash">#</string>
-    <string name="delete_confirmation">Really delete %s?</string>
+    <string name="delete_confirmation">Really delete the selected items?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="generic_error_message">Something went wrong</string>
