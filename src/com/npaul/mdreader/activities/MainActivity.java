@@ -80,18 +80,11 @@ public class MainActivity extends Activity {
             dirHistory.push(currentDirectory);
         }
         currentDirectory = directory;
-        int i = currentDirectory
-                .lastIndexOf("/", currentDirectory.length() - 1);
-        setTitle("..."
-                + currentDirectory.subSequence(i, currentDirectory.length()));
-        if (getFiles(directory) == null) {
-            findViewById(R.id.nofiles).setVisibility(View.VISIBLE);
-            findViewById(R.id.list).setVisibility(View.INVISIBLE);
-        } else {
-            findViewById(R.id.nofiles).setVisibility(View.INVISIBLE);
-            findViewById(R.id.list).setVisibility(View.VISIBLE);
-            files = getFiles(currentDirectory);
-        }
+        int i = currentDirectory.lastIndexOf("/", currentDirectory.length() - 1);
+        setTitle("..." + currentDirectory.subSequence(i, currentDirectory.length()));
+        files = getFiles(currentDirectory);
+        findViewById(R.id.nofiles).setVisibility(files == null ? View.VISIBLE : View.INVISIBLE);
+        findViewById(R.id.list).setVisibility(files == null ? View.INVISIBLE : View.VISIBLE);
         initFileListView();
     }
 
