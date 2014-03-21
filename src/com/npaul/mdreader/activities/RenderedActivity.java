@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,7 +65,7 @@ public class RenderedActivity extends Activity {
      *
      * @author Nathan Paul
      */
-    private class Renderer extends AsyncTask<String, Integer, CharSequence> {
+    private class Renderer extends AsyncTask<Intent, Integer, CharSequence> {
 
         /*
          * (non-Javadoc)
@@ -70,13 +73,13 @@ public class RenderedActivity extends Activity {
          * @see android.os.AsyncTask#doInBackground(Params[])
          */
         @Override
-        protected CharSequence doInBackground(String... params) {
-            String data = params[0];
+        protected CharSequence doInBackground(Intent... params) {
+            text = readInData(params[0]);
             Formatter formatter = new Formatter();
             formatter.addFilter(new StyleFilter());
             formatter.addFilter(new FoldingFilter());
 
-            src = formatter.format(data);
+            src = formatter.format(text);
             return src;
         }
 
@@ -180,8 +183,7 @@ public class RenderedActivity extends Activity {
 
         // Start rendering
         Intent intent = getIntent();
-        text = readInData(intent);
-        new Renderer().execute(text);
+        new Renderer().execute(intent);
 
         // Extract as many data as possible from the intent
         String scheme = intent.getScheme();
@@ -255,11 +257,10 @@ public class RenderedActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
-            text = readInData(data);
             textChanged = true;
             invalidateOptionsMenu();
 
-            new Renderer().execute(text);
+            new Renderer().execute(data);
         }
     }
 
@@ -308,27 +309,45 @@ public class RenderedActivity extends Activity {
      * @return
      */
     private String readInData(Intent intent) {
-        try {
+        if (intent.getExtras() != null && intent.getExtras().getString("text") != null) {
             // for the method when coming from the editActivity
-            return intent.getExtras().get("text").toString();
-        } catch (NullPointerException n) {
-            try {
-                InputStream in = getContentResolver().openInputStream(
+            return intent.getExtras().getString("text");
+        }
+
+        try {
+            InputStream in = null;
+            if (intent.getData().getScheme().equals("file")) {
+                in = getContentResolver().openInputStream(
                         intent.getData());
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(in));
-                String result = new String();
-                String line = reader.readLine();
-                while (line != null) {
-                    result += line + "\n";
-                    line = reader.readLine();
+            } else if (intent.getData().getScheme().startsWith("http")) {
+                URL url = new URL(intent.getData().toString());
+                URLConnection connection = url.openConnection();
+
+                HttpURLConnection httpConnection = (HttpURLConnection) connection;
+                httpConnection.setRequestMethod("GET");
+                httpConnection.connect();
+
+                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    in = httpConnection.getInputStream();
                 }
-                return result;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            if (in == null)
+                return null;
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(in));
+            String result = new String();
+            String line = reader.readLine();
+            while (line != null) {
+                result += line + "\n";
+                line = reader.readLine();
+            }
+            return result;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -447,7 +466,7 @@ public class RenderedActivity extends Activity {
 
     private void editText() {
         Intent intent = new Intent(RenderedActivity.this, EditActivity.class);
-        intent.setData(Uri.fromFile(file));
+        intent.setData(getIntent().getData());
         intent.putExtra("text", text);
         RenderedActivity.this.startActivityForResult(intent, EDIT_CODE);
     }
