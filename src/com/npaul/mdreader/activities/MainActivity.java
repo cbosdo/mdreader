@@ -46,7 +46,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.npaul.mdreader.R;
-import com.npaul.mdreader.adapters.FileListAdapter;
+import com.npaul.mdreader.ui.FileListAdapter;
 import com.npaul.mdreader.util.FileStringComparator;
 
 /**

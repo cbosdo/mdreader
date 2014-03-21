@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.npaul.mdreader.adapters.CheckableRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.npaul.mdreader.ui.CheckableRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:textIsSelectable="false" />
     </LinearLayout>
 
-    <com.npaul.mdreader.adapters.InactiveCheckBox
+    <com.npaul.mdreader.ui.InactiveCheckBox
         android:id="@+id/file_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,4 +46,4 @@
         android:layout_centerVertical="true"
         android:focusable="false" />
 
-</com.npaul.mdreader.adapters.CheckableRelativeLayout>
+</com.npaul.mdreader.ui.CheckableRelativeLayout>

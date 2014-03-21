@@ -10,7 +10,7 @@
  *
  * Copyright (c) 2013 Nathan Paul
  */
-package com.npaul.mdreader.adapters;
+package com.npaul.mdreader.ui;
 
 import java.io.File;
 import java.util.List;

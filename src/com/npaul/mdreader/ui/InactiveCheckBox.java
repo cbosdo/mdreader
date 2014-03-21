@@ -10,7 +10,7 @@
  *
  * Copyright (c) 2014 Cedric Bosdonnat
  */
-package com.npaul.mdreader.adapters;
+package com.npaul.mdreader.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
