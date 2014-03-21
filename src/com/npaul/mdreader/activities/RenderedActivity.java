@@ -316,7 +316,8 @@ public class RenderedActivity extends Activity {
 
         try {
             InputStream in = null;
-            if (intent.getData().getScheme().equals("file")) {
+            if (intent.getData().getScheme().equals("file") ||
+                    intent.getData().getScheme().equals("content")) {
                 in = getContentResolver().openInputStream(
                         intent.getData());
             } else if (intent.getData().getScheme().startsWith("http")) {

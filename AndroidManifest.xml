@@ -39,8 +39,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:host="*" />
-                <data android:scheme="file" />
                 <data android:scheme="content" />
+                <data android:scheme="file" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:mimeType="*/*" />
@@ -51,7 +51,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:host="*"
-                    android:mimeType="application/octet-stream"
+                    android:mimeType="text/x-markdown"
                     android:scheme="content" />
             </intent-filter>
         </activity>
