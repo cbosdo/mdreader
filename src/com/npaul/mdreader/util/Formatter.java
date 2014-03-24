@@ -14,7 +14,7 @@ package com.npaul.mdreader.util;
 
 import java.util.Vector;
 
-import org.markdownj.MarkdownProcessor;
+import com.github.rjeschke.txtmark.Processor;
 
 /**
  * Formats the Markdown into HTML and adds some bits to make it more beautiful.
@@ -24,7 +24,6 @@ import org.markdownj.MarkdownProcessor;
  */
 public class Formatter {
 
-    private MarkdownProcessor mdp;
     private Vector<Filter> filters;
 
     public Formatter() {
@@ -32,15 +31,17 @@ public class Formatter {
     }
 
     public CharSequence format(String markdown) {
-        mdp = new MarkdownProcessor();
-        CharSequence out = mdp.markdown(markdown);
+        long start = System.currentTimeMillis();
+        CharSequence out = Processor.process(markdown);
 
         // Apply the filters on the output.
         // Note that the order of the filters is important
         for (Filter filter : filters) {
             out = filter.filter(out);
         }
+        long end = System.currentTimeMillis();
 
+        System.out.println("Rendering time (ms): " + (end - start));
         return out;
     }
 
