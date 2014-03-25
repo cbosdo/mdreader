@@ -37,7 +37,12 @@ public class Formatter {
         // Apply the filters on the output.
         // Note that the order of the filters is important
         for (Filter filter : filters) {
+            long startFilter = System.currentTimeMillis();
             out = filter.filter(out);
+            long endFilter = System.currentTimeMillis();
+            System.out.println(String.format("Filter time [%1$s]: %2$d ms",
+                                             filter.getClass().getName(),
+                                             (endFilter - startFilter)));
         }
         long end = System.currentTimeMillis();
 
