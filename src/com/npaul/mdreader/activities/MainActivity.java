@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
      *
      * @param DirectoryPath
      *            the full path to the directory
-     * @return the file array, null if the directory is empty
+     * @return the file array
      * @throws NullPointerException
      */
     private ArrayList<File> getFiles(String DirectoryPath)
@@ -103,14 +103,10 @@ public class MainActivity extends Activity {
 
         f.mkdirs();
         File[] files = f.listFiles();
-        if ((files.length == 0) || (files == null)) {
-            return null;
-        } else {
-            for (int i = 0; i < files.length; i++) {
-                File file = files[i];
-                if (!file.isHidden() && (!file.isFile() || file.getName().endsWith(".md"))) {
-                    fileArray.add(files[i]);
-                }
+        for (int i = 0; i < files.length; i++) {
+            File file = files[i];
+            if (!file.isHidden() && (!file.isFile() || file.getName().endsWith(".md"))) {
+                fileArray.add(files[i]);
             }
         }
 
@@ -123,8 +119,16 @@ public class MainActivity extends Activity {
      */
     private void initFileListView() {
         lv = (ListView) findViewById(R.id.list);
-        adapter = new FileListAdapter(this, R.layout.file_browser_item, files);
-        lv.setAdapter(adapter);
+        if (adapter == null) {
+            adapter = new FileListAdapter(this, R.layout.file_browser_item, files);
+            lv.setAdapter(adapter);
+        } else {
+            adapter.clear();
+            for (File file : files) {
+                adapter.add(file);
+            }
+            adapter.notifyDataSetChanged();
+        }
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
